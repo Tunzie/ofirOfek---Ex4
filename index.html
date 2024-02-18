@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BTC/USD Prices</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div id="app" class="max-w-[1000px] mx-auto">
+      <h1 class="font-bold text-3xl text-center text-blue-600 my-4">
+        Cryptocurrency Data
+      </h1>
+    </div>
+    <script>
+      const createTable = (data) => {
+        const table = document.createElement('table');
+        table.classList.add('table');
+    
+        const thead = table.createTHead();
+        const headerRow = thead.insertRow();
+        const headers = ['ID', 'Link', 'Summary'];
+    
+        headers.forEach(headerText => {
+          const th = document.createElement('th');
+          th.textContent = headerText;
+          headerRow.appendChild(th);
+        });
+    
+        const tbody = document.createElement('tbody');
+        Object.entries(data).forEach(([key, value], index) => {
+          const row = tbody.insertRow();
+          const cell1 = row.insertCell(0);
+          const cell2 = row.insertCell(1);
+          const cell3 = row.insertCell(2);
+    
+          cell1.innerHTML = `<img src="${value.image}" alt="${key}"/>`;
+          cell2.innerHTML = key;
+          cell3.innerHTML = `<a href="${value.website}" target="_blank">${value.name}</a>`;
+          cell3.classList.add('font-bold', 'text-blue-600');
+          
+          const summaryCell = row.insertCell(3);
+          summaryCell.textContent = value.summary;
+    
+          // Add additional classes based on the index for styling the first row differently
+          if (index === 0) {
+            row.classList.add('bg-blue-50');
+          }
+        });
+    
+        table.appendChild(tbody);
+        document.getElementById('app').appendChild(table);
+      };
+    
+      const url = "https://api.mtw-testnet.com/assets/all";
+      fetch(url)
+        .then(response => response.json())
+        .then(data => createTable(data))
+        .catch(err => console.error('Error fetching data:', err));
+    </script>
+    
+  </body>
+  </html>
+</html>
+
+
